@@ -3,7 +3,7 @@ export default function Header() {
     <span className="font-normal">RE</span>
     <span className="font-bold">THORIQ</span>
     <div className="font-normal">
-        Ideas, work, and thoughts
+        Ideas, works, and thoughts
     </div>
 </div>;
 }
