@@ -1,11 +1,29 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import CareerHistoryItem from '../components/career-history-item.tsx';
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.tsx';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const PANDAI = {
+	company: "PANDAI",
+	duration: "2022 - 2025 MY",
+	achievements: [
+		"Tech lead for Math Drill, LLM powered math training.",
+		"Scaled organic traffic from 100k/month to 1M/month.",
+		"Developed and maintained AskPbot, AI powered learning app."
+	]
+};
+const BLACKACE = {
+	company: "BLACK ACE",
+	duration: "2025 - PRESENT. CA",
+	achievements: []
+};
 ---
 
 <Layout>
-	<Welcome />
+	<Hero />
+	<h2 class="text-xl mt-20 mb-12 font-medium">CAREER</h2>
+	<div class="flex flex-col gap-12">
+		<CareerHistoryItem data={PANDAI} />
+		<CareerHistoryItem data={BLACKACE} />
+	</div>
 </Layout>
