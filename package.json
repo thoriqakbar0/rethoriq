@@ -7,7 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "start": "node ./dist/server/entry.mjs"
+    "start": "npx serve dist"
   },
   "dependencies": {
     "@astrojs/react": "^4.1.5",
@@ -23,5 +23,8 @@
   "devDependencies": {
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "^0.14.1"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
