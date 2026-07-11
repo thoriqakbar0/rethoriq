@@ -13,7 +13,8 @@
     "lint": "eslint",
     "format": "prettier --check .",
     "check": "prettier --write . && eslint --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "deploy": "pnpm build && wrangler deploy"
   },
   "dependencies": {
     "@tanstack/react-router": "latest",
@@ -23,6 +24,7 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.26.0",
     "@tanstack/eslint-config": "latest",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
@@ -33,7 +35,8 @@
     "typescript": "^5.7.2",
     "vite": "^7.3.1",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.5"
+    "vitest": "^3.0.5",
+    "wrangler": "^4.110.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

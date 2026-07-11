@@ -14,3 +14,9 @@ pnpm dev
 ```bash
 pnpm build
 ```
+
+## Deploy
+
+```bash
+pnpm deploy
+```
