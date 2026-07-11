@@ -1,6 +1,6 @@
-# Rethoriq v3
+# rethoriq.com
 
-Minimal TanStack Start app. Single empty white page.
+Thoriq's very small personal site. TanStack Start and React, with plain CSS.
 
 ## Run
 
@@ -9,21 +9,8 @@ pnpm install
 pnpm dev
 ```
 
-## Agentation
-
-Agentation is installed but off by default, so the page stays blank.
-
-```bash
-VITE_ENABLE_AGENTATION=1 \\
-pnpm agentation:mcp
-pnpm dev
-```
-
-Override the endpoint with `VITE_AGENTATION_ENDPOINT`.
-
-## Ship
+## Build
 
 ```bash
 pnpm build
-pnpm deploy
 ```

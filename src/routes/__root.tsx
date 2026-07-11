@@ -1,6 +1,4 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-import AgentationBridge from '../components/AgentationBridge'
-
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
@@ -14,7 +12,12 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Rethoriq v3',
+        title: 'Thoriq Akbar — AI Product Engineer',
+      },
+      {
+        name: 'description',
+        content:
+          'Thoriq Akbar is an AI product engineer working across model behaviour, backend systems, and user experience.',
       },
     ],
     links: [
@@ -39,7 +42,6 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        <AgentationBridge />
         <Scripts />
       </body>
     </html>
