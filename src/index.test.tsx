@@ -10,7 +10,7 @@ describe('root page', () => {
   it('introduces Thoriq and his work history', () => {
     const markup = renderToStaticMarkup(<HomePage />)
 
-    expect(markup).toContain('I’m Thoriq')
+    expect(markup).toContain('Thoriq Akbar')
     expect(markup).toContain('PANDAI')
     expect(markup).toContain('BLACK ACE')
     expect(markup).toContain('mailto:thoriqakbar00@gmail.com')

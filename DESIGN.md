@@ -2,52 +2,56 @@
 
 ## 0. Research log
 
-- Source: the original rethoriq site. Kept its direct first-person voice and compressed its career history.
-- Direction: intentionally bare, editorial, and personal. No cards, pills, icons, gradients, decorative motion, or product-marketing sections.
+- Live reference: `https://benji.org/`, inspected at 375, 768, and 1280px on 2026-07-11.
+- Runtime extraction used computed styles and full-page captures in `.reference/`.
+- Borrowed only the layout grammar, typography, spacing, color, and link behavior. All copy and identity remain Thoriq's.
 
 ## 1. Brief
 
-A single personal page for Thoriq. It says who he is, the work he does, where he has worked, and how to reach him.
+A quiet personal page for Thoriq that reads like a concise, well-typeset note: biography first, compact work index second, contact last.
 
 ## 2. People and constraints
 
 - A recruiter or collaborator should understand Thoriq's range in under 20 seconds.
-- A returning peer should find the email immediately.
-- The page must remain legible under zoom, keyboard navigation, reduced motion, and narrow screens.
+- A peer should find current work and contact information without navigation.
+- The page must remain legible under zoom, keyboard navigation, and narrow screens.
 
 ## 3. Visual language
 
-- Warm paper background with near-black text and one quiet gray.
-- System sans-serif only; no webfont request.
-- One narrow reading column, generous whitespace, hairline rules.
-- Depth model: flat document. No shadows and no surface decoration.
+- Near-white canvas (`#fdfdfc`) and near-black text (`#111111`).
+- One 550px reading column centered on desktop.
+- Small Inter-like sans-serif typography: 14px text, 20px reading line.
+- No cards, borders, shadows, icons, decorative assets, or display typography.
 
 ## 4. Tokens
 
-- Color: `paper` #f4f2ed, `ink` #171716, `quiet` #706e68, `line` #d8d5ce.
-- Type: 16px body, 14px label, 40px display; display becomes 34px on narrow screens.
-- Space: 4px base; use 8, 12, 16, 24, 32, 48, 64, and 96px.
-- Measure: 640px maximum.
+- Color: `canvas` #fdfdfc, `ink` #111111, `muted` rgba(0, 0, 0, 0.4).
+- Type: 14px body and headings; 13px footer; 20px paragraph line-height; weights 460 and 500.
+- Tracking: -0.09px body, -0.04px footer.
+- Space: 4px base; key values 8, 12, 16, 24, 32, 40, 48, 80px.
+- Measure: 550px desktop; viewport minus 48px on mobile/tablet.
 
 ## 5. Primitives
 
-- Text link: underlined only on hover/focus, with a visible focus outline.
-- Work row: year range, company, and one short contribution sentence.
-- Rule: one-pixel divider using `line`.
+- Inline link: ink text, no resting underline, 0.2s opacity transition; underline on hover/focus.
+- Section label: muted 14px text with 8px bottom padding.
+- Work row: 48/108px leading indent by viewport, title and summary at left, date aligned right.
 
 ## 6. Responsive behavior
 
-- Desktop uses a two-column work row with fixed dates.
-- Below 560px, each work row stacks date above the description.
-- Page padding is 24px on narrow screens and 40px otherwise.
+- At 1280px: 550px column, 80px top padding, 108px work-row indent.
+- At 768px: viewport minus 228px column, 32px top padding, 108px indent.
+- At 375px: 24px gutters, 32px top padding, 48px work-row indent.
+- Work dates stay right-aligned and may split into two lines on narrow screens.
 
-## 7. Accessibility
+## 7. Interaction and motion
 
-- Semantic landmarks and headings.
-- Minimum body contrast exceeds WCAG AA.
-- Links remain identifiable without color alone.
-- No motion is required to understand or use the page.
+- Links transition opacity over 0.2s and underline on hover/focus.
+- Work titles transition opacity over 0.14s; no decorative animation.
+- Focus is a visible 2px outline with 2px offset.
 
-## 8. Accepted debt
+## 8. Accessibility and accepted debt
 
-- No portrait or social graph metadata yet; neither is required for this deliberately bare first release.
+- Semantic article, headings, list, time, footer, and navigation landmarks.
+- Muted text is supplementary; essential content uses full-contrast ink.
+- No portrait, writing archive, or live local-time widget in this intentionally compact version.

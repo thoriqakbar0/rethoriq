@@ -6,12 +6,12 @@ export const Route = createFileRoute('/')({
 
 const workHistory = [
   {
-    dates: '2025—now',
+    dates: '2025 / now',
     company: 'PANDAI',
     summary: 'Building the AI runtime and core learning flows for P&AI.',
   },
   {
-    dates: '2025—now',
+    dates: '2025 / now',
     company: 'XCENT.AI + NEWGEN',
     summary: 'Part-time product engineering across messaging, web, mobile, and AI.',
   },
@@ -30,43 +30,53 @@ const workHistory = [
 export function HomePage() {
   return (
     <main>
-      <header>
-        <p className="eyebrow">THORIQ AKBAR · MOJOKERTO, INDONESIA</p>
-        <h1>I’m Thoriq.</h1>
-        <p className="intro">
-          I build AI products end to end, from model behaviour and backend
-          systems to the thing people actually use. Before engineering, I
-          worked in growth.
+      <article className="bio">
+        <h1>Thoriq Akbar</h1>
+        <time dateTime="2026-07-11">Updated Jul 11, 2026</time>
+        <p>I’m an AI product engineer based in Mojokerto, Indonesia.</p>
+        <p>
+          I build products end to end, from model behaviour and backend
+          infrastructure to the interface people actually use. At{' '}
+          <a href="https://pandai.org">Pandai</a>, I work on P&amp;AI, a
+          proactive learning agent for students across Malaysia and Brunei.
         </p>
-      </header>
+        <p>
+          I also work with <a href="https://xcent.ai">Xcent.ai</a> and Newgen
+          across messaging, web, mobile, and AI products. Before engineering, I
+          worked in growth and grew organic traffic 9×.
+        </p>
+        <p>
+          I care about useful AI, clear systems, and products that feel properly
+          finished.
+        </p>
+        <p>
+          You can find me on{' '}
+          <a href="https://github.com/thoriqakbar0">GitHub</a>,{' '}
+          <a href="https://www.linkedin.com/in/thoriqakbar0/">LinkedIn</a>, or
+          reach me via{' '}
+          <a href="mailto:thoriqakbar00@gmail.com">email</a>.
+        </p>
+      </article>
 
-      <section aria-labelledby="work-heading">
-        <h2 id="work-heading">A short history of where I work</h2>
-        <div className="work-list">
+      <section className="work" aria-labelledby="work-heading">
+        <h2 id="work-heading">Work</h2>
+        <ul>
           {workHistory.map((work) => (
-            <article className="work-row" key={`${work.dates}-${work.company}`}>
-              <p className="dates">{work.dates}</p>
-              <div>
-                <h3>{work.company}</h3>
-                <p>{work.summary}</p>
+            <li key={`${work.dates}-${work.company}`}>
+              <div className="work-row">
+                <div>
+                  <h3>{work.company}</h3>
+                  <p>{work.summary}</p>
+                </div>
+                <time>{work.dates}</time>
               </div>
-            </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <footer>
-        <p>
-          Say hi at{' '}
-          <a href="mailto:thoriqakbar00@gmail.com">
-            thoriqakbar00@gmail.com
-          </a>
-          .
-        </p>
-        <nav aria-label="Elsewhere">
-          <a href="https://github.com/thoriqakbar0">GitHub</a>
-          <a href="https://www.linkedin.com/in/thoriqakbar0/">LinkedIn</a>
-        </nav>
+        <p>AI product engineer in Mojokerto, Indonesia.</p>
       </footer>
     </main>
   )
