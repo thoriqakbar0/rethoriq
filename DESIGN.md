@@ -33,6 +33,7 @@ A quiet personal page for Thoriq that reads like a concise, well-typeset note: b
 
 ## 5. Primitives
 
+- Favicon: transparent `tabler:letter-t` mark from Better Icons, drawn in `ink` at its native 24px view box.
 - Inline link: ink text, no resting underline, 0.2s opacity transition; underline on hover/focus.
 - Section label: muted 14px text with 8px bottom padding.
 - Work row: 48/108px leading indent by viewport, title and summary at left, date aligned right.
