@@ -1,4 +1,5 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
+import { Agentation } from 'agentation'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
@@ -43,6 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        {import.meta.env.DEV && <Agentation />}
         <Scripts />
       </body>
     </html>

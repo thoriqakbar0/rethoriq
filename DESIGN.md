@@ -8,7 +8,7 @@
 
 ## 1. Brief
 
-A quiet personal page for Thoriq that reads like a concise, well-typeset note: biography first, compact work index second, contact last.
+A quiet personal page for Thoriq that reads like a concise, well-typeset note: biography and contact first, compact work index second.
 
 ## 2. People and constraints
 
@@ -26,8 +26,8 @@ A quiet personal page for Thoriq that reads like a concise, well-typeset note: b
 ## 4. Tokens
 
 - Color: `canvas` #fdfdfc, `ink` #111111, `muted` rgba(0, 0, 0, 0.4).
-- Type: 14px body and headings; 13px footer; 20px paragraph line-height; weights 460 and 500.
-- Tracking: -0.09px body, -0.04px footer.
+- Type: 14px body and headings; 20px paragraph line-height; weights 460 and 500.
+- Tracking: -0.09px body.
 - Space: 4px base; key values 8, 12, 16, 24, 32, 40, 48, 80px.
 - Measure: 550px desktop; viewport minus 48px on mobile/tablet.
 
@@ -53,6 +53,6 @@ A quiet personal page for Thoriq that reads like a concise, well-typeset note: b
 
 ## 8. Accessibility and accepted debt
 
-- Semantic article, headings, list, time, footer, and navigation landmarks.
+- Semantic article, headings, list, time, and navigation landmarks.
 - Muted text is supplementary; essential content uses full-contrast ink.
 - No portrait, writing archive, or live local-time widget in this intentionally compact version.
