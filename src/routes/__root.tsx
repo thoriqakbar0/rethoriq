@@ -44,7 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        {import.meta.env.DEV && <Agentation />}
+        {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
         <Scripts />
       </body>
     </html>
