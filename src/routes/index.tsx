@@ -85,7 +85,7 @@ export function HomePage() {
 
       <nav className="contact-links" aria-label="Contact links">
         <a href="https://github.com/thoriqakbar0">GitHub</a>
-        <a href="mailto:thoriqakbar00@gmail.com">Email</a>
+        <a href="mailto:its@thoriq.link">Email</a>
         <a href="https://x.com/isninkhamiss">X</a>
       </nav>
 

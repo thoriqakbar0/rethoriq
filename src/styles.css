@@ -77,8 +77,8 @@ main {
 }
 
 .moodboard-scene {
-  width: 835px;
-  margin: 36px 0 64px 111px;
+  width: 100%;
+  margin: 36px 0 64px;
   overflow: hidden;
 }
 
@@ -434,11 +434,6 @@ footer p {
   main {
     width: calc(100% - 128px);
     padding-top: 64px;
-  }
-
-  .moodboard-scene {
-    width: 100%;
-    margin-left: 0;
   }
 }
 
