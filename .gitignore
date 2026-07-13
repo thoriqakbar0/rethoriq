@@ -15,3 +15,7 @@ __unconfig*
 todos.json
 build
 coverage
+.agents/
+.pi/
+outputs/
+skills-lock.json

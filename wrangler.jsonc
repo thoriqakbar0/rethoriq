@@ -3,5 +3,9 @@
   "name": "rethoriq",
   "compatibility_date": "2026-07-11",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "@tanstack/react-start/server-entry"
+  "main": "@tanstack/react-start/server-entry",
+  "routes": [
+    { "pattern": "thoriq.link", "custom_domain": true },
+    { "pattern": "rethoriq.com", "custom_domain": true }
+  ]
 }
