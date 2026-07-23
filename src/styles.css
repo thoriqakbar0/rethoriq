@@ -11,6 +11,11 @@
   --tree: #24563a;
   --path: #c79b62;
   --amber: #d58b35;
+  --text-caption: 0.8125rem;
+  --text-label: 0.9375rem;
+  --text-body: 1rem;
+  --text-title: 1.5rem;
+  --text-display: clamp(1.5rem, 3vw, 1.875rem);
   color: var(--ink);
   background: var(--canvas);
   font-family:
@@ -44,6 +49,23 @@ body {
   background: var(--canvas);
 }
 
+.ocean-banner {
+  width: 100%;
+  height: clamp(160px, 16vw, 220px);
+  overflow: hidden;
+  background: var(--canvas);
+  background-image: url('/media/waves-fallback.png');
+  background-position: center bottom;
+  background-size: cover;
+}
+
+.ocean-banner canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
 main {
   width: 720px;
   margin: 0 auto;
@@ -69,22 +91,10 @@ main {
   max-width: 34ch;
   margin: 0;
   color: var(--ink);
-  font-size: clamp(24px, 3vw, 30px);
+  font-size: var(--text-display);
   line-height: 1.3;
   letter-spacing: -0.025em;
-  text-wrap: pretty;
-}
-
-.moodboard-scene {
-  width: 100%;
-  margin: 36px 0 64px;
-  overflow: hidden;
-}
-
-.moodboard-scene img {
-  display: block;
-  width: 100%;
-  height: auto;
+  text-wrap: balance;
 }
 
 ::selection {
@@ -115,17 +125,17 @@ footer p {
 .page {
   position: relative;
   width: min(920px, calc(100% - 48px));
-  margin-top: 28px;
+  margin-top: 8px;
   margin-bottom: 28px;
   padding: 38px 44px 0;
 }
 
 .page .bio {
   display: grid;
-  grid-template-columns: minmax(0, 0.8fr) minmax(360px, 1.2fr);
+  grid-template-columns: minmax(160px, 0.8fr) minmax(0, 1.2fr);
   align-items: start;
   gap: 48px;
-  margin-top: 0;
+  margin-top: 88px;
 }
 
 .page .bio-copy p:first-child {
@@ -143,28 +153,35 @@ footer p {
 
 .bio h2 {
   margin: 0;
-  font-size: 24px;
+  font-size: var(--text-title);
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.5px;
+  text-wrap: balance;
 }
 
 .bio-heading time {
   display: block;
   margin-top: 16px;
   color: var(--stone);
-  font-size: 14px;
+  font-size: var(--text-caption);
   font-family: 'SFMono-Regular', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .bio-copy p {
   padding-top: 20px;
   overflow-wrap: break-word;
+  text-wrap: pretty;
 }
 
 a {
   color: var(--brand);
   text-decoration: none;
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: from-font;
+  text-underline-position: from-font;
   text-underline-offset: 3px;
 }
 
@@ -192,12 +209,12 @@ a:focus-visible {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
-  font-size: 15px;
+  font-size: var(--text-label);
   font-weight: 500;
 }
 
 .work {
-  margin-top: 72px;
+  margin-top: 88px;
 }
 
 .work-header {
@@ -214,9 +231,11 @@ a:focus-visible {
 .work-header h2 {
   padding: 0;
   color: var(--ink);
-  font-size: 24px;
+  font-size: var(--text-title);
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
 .work ul {
@@ -259,12 +278,13 @@ a:focus-visible {
 .work-row p {
   margin-top: 2px;
   color: var(--olive);
+  text-wrap: pretty;
 }
 
 .work-row time {
   color: var(--stone);
   font-family: 'SFMono-Regular', Consolas, monospace;
-  font-size: 13px;
+  font-size: var(--text-caption);
   font-variant-numeric: tabular-nums;
   text-align: start;
   white-space: nowrap;
@@ -278,7 +298,19 @@ footer {
 
 footer p {
   color: var(--stone);
-  font-size: 13px;
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 720px) {
+  .page .bio {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-top: 72px;
+  }
+
+  .page .bio-copy p:first-child {
+    padding-top: 0;
+  }
 }
 
 @media (min-width: 481px) and (max-width: 900px) {
@@ -289,6 +321,10 @@ footer p {
 }
 
 @media (max-width: 480px) {
+  .ocean-banner {
+    height: 132px;
+  }
+
   main {
     width: calc(100% - 48px);
     padding-top: 32px;
@@ -299,11 +335,11 @@ footer p {
   }
 
   .hero-intro p {
-    font-size: 24px;
+    font-size: var(--text-title);
   }
 
   .bio {
-    margin-top: 56px;
+    margin-top: 64px;
   }
 
   .page {
@@ -317,11 +353,6 @@ footer p {
 
   .page .bio-copy p:first-child {
     padding-top: 20px;
-  }
-
-  .moodboard-scene {
-    width: 100%;
-    margin: 8px 0 56px;
   }
 
   .work {
