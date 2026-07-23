@@ -12,24 +12,24 @@ interface RuntimeOption {
 const runtimeOptions: ReadonlyArray<RuntimeOption> = [
   {
     id: 'agent',
-    label: 'A durable agent',
+    label: 'The session must survive',
     recommendation: 'agentOS',
     detail:
-      'The session—not each command—must survive. Use agentOS actor mode to retain identity, selected state, history, and permission bookkeeping.',
+      'Keep identity, selected state, history, and permission bookkeeping on the session clock. The lightweight agent environment is enough.',
   },
   {
     id: 'machine',
-    label: 'A full Linux machine',
+    label: 'Only the machine matters',
     recommendation: 'ComputeSDK',
     detail:
-      'The job needs full Linux. Use ComputeSDK with a provider that supports native binaries, system packages, browsers, or GPUs.',
+      'The work is bounded and needs full Linux. Create the machine for the job, then release it when the work ends.',
   },
   {
     id: 'both',
-    label: 'A durable agent and a full Linux machine',
+    label: 'The session survives; machines come and go',
     recommendation: 'Use both',
     detail:
-      'agentOS actor mode retains the durable agent state. Its bridge attaches a ComputeSDK sandbox from a provider compatible with the required full-Linux work.',
+      'Keep continuity in agentOS, then attach a ComputeSDK sandbox only when the session needs full Linux capability.',
   },
 ]
 
@@ -48,7 +48,7 @@ export function RuntimeBoundaryExplorer() {
     >
       <header className="runtime-explorer-header">
         <p>Boundary</p>
-        <h2 id="runtime-explorer-title">What do you need?</h2>
+        <h2 id="runtime-explorer-title">What must survive?</h2>
       </header>
 
       <fieldset className="runtime-explorer-options">
@@ -75,7 +75,7 @@ export function RuntimeBoundaryExplorer() {
         >
           {need !== 'machine' ? (
             <div>
-              <span>Durable agent</span>
+              <span>Durable session</span>
               <strong>agentOS</strong>
             </div>
           ) : null}
@@ -87,7 +87,7 @@ export function RuntimeBoundaryExplorer() {
           ) : null}
           {need !== 'agent' ? (
             <div>
-              <span>Full Linux machine</span>
+              <span>Disposable machine</span>
               <strong>ComputeSDK</strong>
             </div>
           ) : null}
@@ -101,7 +101,7 @@ export function RuntimeBoundaryExplorer() {
             <span>{selected.detail}</span>
           </>
         ) : (
-          <span>Select the capability your product needs.</span>
+          <span>Select the lifecycle your product needs to preserve.</span>
         )}
       </output>
     </section>
