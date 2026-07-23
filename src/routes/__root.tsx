@@ -1,5 +1,6 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 import { Agentation } from 'agentation'
+import { OceanBanner } from '#/components/ocean-banner'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
@@ -43,6 +44,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <OceanBanner />
         {children}
         {import.meta.env.DEV && <Agentation endpoint="http://localhost:4747" />}
         <Scripts />
