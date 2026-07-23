@@ -4,11 +4,6 @@ interface ComputeSdkVsAgentOsArticleBodyProps {
   readonly runtimeBoundaryExplorer: ReactNode
 }
 
-const computeSdkRepository =
-  'https://github.com/computesdk/computesdk/tree/314ef4e78c24c69da4b2a4be9371d9b960ed63e7'
-const agentOsRepository =
-  'https://github.com/rivet-dev/agentos/tree/1bf0d2fb209e3b1de8654e9350ae88f7f154805c'
-
 /**
  * Supplies the article's prose and editorial figures without page chrome.
  */
@@ -17,85 +12,46 @@ export function ComputeSdkVsAgentOsArticleBody({
 }: ComputeSdkVsAgentOsArticleBodyProps) {
   return (
     <>
-      <aside className="article-summary" aria-labelledby="summary-heading">
-        <p className="article-summary-label" id="summary-heading">
-          Quick glance
-        </p>
-        <p className="article-summary-question">
-          Is your unit of work the sandbox or the agent?
-        </p>
-        <ol>
-          <li>
-            <strong>Choose ComputeSDK</strong> when the unit of work is a
-            disposable provider-backed sandbox.
-          </li>
-          <li>
-            <strong>Choose agentOS actor mode</strong> when agent identity,
-            selected state, and session history must survive the request.
-          </li>
-          <li>
-            <strong>Use both</strong> when that durable agent also needs full
-            Linux and the selected sandbox provider supplies it.
-          </li>
-        </ol>
-      </aside>
-
       <p>
-        Why does an agent need separate compute? Because the agent and the
-        machine doing its work have different lifecycles. Looking only at the
-        agent loop hides jobs that need a browser, native compiler, system
-        package, or GPU.
+        Every coding agent runs on two clocks. The agent clock measures
+        identity, sessions, permissions, and history across requests. The
+        machine clock measures provisioning, execution, billing, and teardown
+        for one workload. Treat them as one lifecycle and either expensive
+        compute lives too long or agent state disappears too early.
       </p>
 
-      <p>
-        agentOS actor mode keeps the agent addressable: its identity, selected
-        state, sessions, schedule, and permission bookkeeping. ComputeSDK
-        provisions a provider-backed sandbox and returns its results; the
-        selected provider determines its runtime and machine capabilities. One
-        preserves the agent&apos;s continuity; the other supplies compute.
-      </p>
-
-      <h2 id="boundary">The split happens after the command</h2>
+      <h2 id="boundary">Each product owns one clock</h2>
 
       <p>
+        On the machine clock,{' '}
         <a href="https://docs.computesdk.com/getting-started/introduction">
           ComputeSDK
         </a>{' '}
-        abstracts sandbox providers. E2B, Modal, and Daytona expose different
-        APIs; ComputeSDK puts the same TypeScript operations in front of them:
-        create or recover a sandbox, run a command, work with files, expose a
-        port, and destroy the resource. It can prioritize providers, distribute
-        work round-robin, and fall through when sandbox creation fails.
-        ComputeSDK tracks the sandbox lifecycle; your application still tracks
-        the agent.
+        standardizes how an application creates or recovers a sandbox, runs
+        commands, works with files, exposes a port, and destroys the resource.
+        Providers such as E2B, Modal, and Daytona supply the actual machine,
+        capabilities, isolation, and billing. ComputeSDK can route creation
+        across them, but it does not give the work an agent identity or preserve
+        a conversation around it.
       </p>
 
       <p>
-        The actor layer in{' '}
+        On the agent clock, the actor layer in{' '}
         <a href="https://agentos-sdk.dev/docs/architecture/">agentOS</a> keeps a
-        named agent addressable after a request or browser tab ends. It adds
-        streamed sessions, persistence, scheduled work, and sleep/wake behavior.
-        Across sleep, the agent&apos;s identity and selected state survive; live
-        processes do not. Underneath, agentOS runs a virtual computer inside the
-        application host. Its virtual kernel controls files, processes, pipes,
-        interactive terminal sessions, networking, and permissions. JavaScript
-        runs in V8 isolates—V8 is Google&apos;s JavaScript engine, not “VM
-        8”—while command-line software runs as WebAssembly.
+        named agent addressable after a request or browser tab ends. It owns
+        sessions, streamed events, selected persistent state, permissions,
+        scheduled work, and sleep/wake behavior. It also supplies a lightweight
+        virtual computer inside the application host: JavaScript runs in V8
+        isolates, command-line software runs as WebAssembly, and a virtual
+        kernel mediates files, processes, terminals, networking, and host
+        access.
       </p>
 
       {runtimeBoundaryExplorer}
 
-      <p>
-        agentOS actor mode retains the durable agent&apos;s selected state. Its
-        first-party bridge attaches a ComputeSDK sandbox to the actor VM and
-        destroys the sandbox with that VM. The application or agent can invoke
-        the mounted Linux environment for work that needs capabilities beyond V8
-        and WebAssembly.
-      </p>
+      <h2 id="quickstarts">The quickstarts start different clocks</h2>
 
-      <h2 id="quickstarts">The quickstarts expose the boundary</h2>
-
-      <p>ComputeSDK starts with a sandbox and a command:</p>
+      <p>ComputeSDK starts the machine clock with a sandbox and a command:</p>
 
       <pre>
         <code>{`import { e2b } from "@computesdk/e2b";
@@ -107,25 +63,22 @@ await sandbox.destroy();`}</code>
       </pre>
 
       <p>
-        Your code selects a provider, provisions a remote environment, runs the
-        command, and cleans up the billable resource. Command failures come back
-        as exit codes; provider and network failures throw. The{' '}
+        The application selects a provider, creates a remote environment, runs
+        one command, and destroys the billable resource. The{' '}
         <a href="https://docs.computesdk.com/getting-started/quick-start">
           production guidance
         </a>{' '}
         recommends <code>try/finally</code> because an abandoned sandbox keeps
-        consuming resources. The call returns a command or file result; it does
-        not preserve an ongoing agent session or its state.
+        consuming resources. ComputeSDK returns command output and an exit code;
+        it does not choose a model, run an agent loop, store a transcript,
+        request approval, or resume a conversation. Those responsibilities stay
+        with the application.
       </p>
 
       <p>
-        ComputeSDK does not choose a model, run an agent loop, store a
-        transcript, request human approval, schedule another turn, or resume a
-        conversation. If you choose it expecting those features, they become
-        application code you must design, store, secure, and operate.
+        agentOS starts the agent clock with a named actor and session
+        (abridged):
       </p>
-
-      <p>agentOS starts with a named actor and agent session (abridged):</p>
 
       <pre>
         <code>{`const vm = agentOS({ software: [pi] });
@@ -141,20 +94,27 @@ const file = await handle.readFile("/workspace/hello.js");`}</code>
       </pre>
 
       <p>
-        The addressable actor survives independently of the browser client. You
-        open a coding-agent session, stream its events, send a prompt, and read
-        the file produced by the turn. The{' '}
+        The application addresses the actor as <code>my-agent</code>, opens a
+        coding-agent session, sends a prompt, and reads the resulting file. The{' '}
         <a href="https://agentos-sdk.dev/docs/quickstart/">full quickstart</a>{' '}
-        centers on an actor, a session, and an agent rather than a shell
-        command. That difference matters when the next request must find the
-        same agent, files, permissions, and history.
+        also streams session events. The actor survives independently of the
+        browser client, so a later request can find the same agent, selected
+        files, permissions, and completed history.
       </p>
 
-      <h2 id="trade-offs">What each choice makes you own</h2>
+      <p>
+        Their overlap is command execution. Their difference is everything that
+        must exist before the command can run and everything that must remain
+        after it finishes.
+      </p>
+
+      <h2 id="trade-offs">Splitting the clocks changes what you own</h2>
 
       <p>
-        For each row, ask what your application must store, retry, secure, and
-        pay for.
+        ComputeSDK moves sandbox acquisition and control out of the application.
+        agentOS moves agent continuity and its lightweight runtime out. The
+        remaining responsibilities become clearer when the same questions are
+        asked of both layers.
       </p>
 
       <div className="article-table-wrap">
@@ -206,153 +166,139 @@ const file = await handle.readFile("/workspace/hello.js");`}</code>
               <td>Your application or another framework</td>
               <td>The agentOS actor layer</td>
             </tr>
-            <tr>
-              <th scope="row">How is it licensed?</th>
-              <td>MIT</td>
-              <td>Apache-2.0</td>
-            </tr>
           </tbody>
         </table>
       </div>
 
+      <h3>They are portable along different axes</h3>
+
       <p>
-        ComputeSDK&apos;s portability ends at its shared interface. A workload
-        that depends on one provider&apos;s GPU configuration or snapshot
-        semantics is still provider-specific. agentOS can place its runtime in
-        managed Rivet, self-hosted Rivet, or an embedded Node backend, but it
-        deliberately exposes less of a machine.
+        ComputeSDK carries shared sandbox operations across compute providers;
+        agentOS carries the same agent runtime across managed Rivet, self-hosted
+        Rivet, or an embedded Node backend. Neither makes every dependency
+        portable. A ComputeSDK workload that relies on one provider&apos;s GPU
+        or snapshot semantics remains provider-specific, while agentOS can move
+        between hosts because its guest exposes a deliberately smaller machine.
       </p>
 
-      <h3>Read the benchmark in scope</h3>
+      <h3>Durable does not mean frozen in place</h3>
 
       <p>
-        The published agentOS benchmarks measure its smaller runtime. They{' '}
+        Across sleep, agentOS preserves selected files, session configuration,
+        completed history, and permission bookkeeping. It does not preserve live
+        commands or agent processes. Waking an actor reconstructs a safe
+        continuation over durable state; it does not resume an entire suspended
+        computer.
+      </p>
+
+      <h3>A smaller runtime is not a faster full Linux sandbox</h3>
+
+      <p>
+        The published agentOS benchmarks measure that smaller environment. They{' '}
         <a href="https://agentos-sdk.dev/docs/benchmarks/">report</a> a 4.8 ms
         median VM start after a shared helper process is already running. A
         simple shell workload adds roughly 22 MB of memory; a coding-agent
-        workload adds about 131 MB. Those numbers are not a neutral comparison
-        with a full Linux sandbox. The{' '}
+        workload adds about 131 MB. The{' '}
         <a href="https://agentos-sdk.dev/docs/limitations/">limitations</a>{' '}
         exclude arbitrary downloaded binaries, <code>apt</code>, Docker, kernel
         modules, GPUs, and native toolchains that have not been built for its
-        registry. Its figures are useful only for workloads that fit that
-        smaller environment.
+        registry, so those figures do not compare like-for-like with a
+        provider-backed full Linux sandbox.
       </p>
 
-      <h3>When the product needs both</h3>
+      <h3>The agent can borrow a full machine</h3>
 
       <p>
-        The first-party integration covers products with both workload shapes.
-        Its{' '}
+        Using both means working with two different computers. The agentOS VM is
+        the lightweight V8 and WebAssembly environment inside the application
+        host. The ComputeSDK sandbox is the external full Linux machine. The
+        second extends the first with capabilities it deliberately does not
+        contain.
+      </p>
+
+      <p>
+        The first-party{' '}
         <a href="https://agentos-sdk.dev/docs/sandbox/">
           sandbox-mounting extension
         </a>{' '}
-        makes an external sandbox available for browsers, native extensions,
-        desktop automation, or heavy builds. The application or agent decides
-        when to invoke it. The agentOS snapshot inspected for this article
-        includes a ComputeSDK provider for that full-sandbox layer.
+        starts a ComputeSDK-backed sandbox, projects its filesystem into the
+        actor VM, exposes its process controls to the agent, and destroys the
+        sandbox with the VM. The agent keeps its identity and sessions while
+        borrowing disposable hands for browsers, native compilation, GPUs, or
+        other full Linux work.
       </p>
 
-      <h2 id="security">Security belongs to different components</h2>
+      <h2 id="security">Each clock has its own trust boundary</h2>
 
       <p>
-        With ComputeSDK, the selected provider supplies isolation. A common API
-        does not make E2B, Modal, Daytona, and other backends the same security
-        product. You still need to evaluate tenant isolation, credentials,
-        network policy, images, regional controls, and cleanup for the provider
-        you deploy. API portability does not move that responsibility into
-        ComputeSDK.
+        On the machine clock, ComputeSDK standardizes control, not isolation.
+        The selected provider remains responsible for tenant boundaries, network
+        policy, images, credentials, regional controls, and cleanup. A common
+        API cannot make E2B, Modal, Daytona, and other backends the same
+        security product, so changing providers still requires a security
+        review.
       </p>
 
       <p>
-        agentOS publishes a narrower{' '}
+        On the agent clock, agentOS defines its own{' '}
         <a href="https://agentos-sdk.dev/docs/security-model/">threat model</a>.
-        Its virtual kernel mediates filesystem, process, network, DNS, pipes,
-        and PTYs. Host access is denied by default, then granted through
-        selected network routes, mounts, or typed bindings. The documentation
-        also labels the APIs as preview. Its threat model describes the intended
-        boundary; it does not prove a release safe for hostile code. A smaller
-        virtual machine narrows what must be isolated, but it does not remove
-        the need to validate the isolation you rely on.
+        Its virtual kernel mediates files, processes, networking, pipes, and
+        terminals; host access is denied until the application grants a route,
+        mount, or typed binding. That makes the policy boundary explicit, but it
+        also places the sidecar and every approved host binding inside the
+        trusted system. The APIs remain preview, so the documented model still
+        needs validation against the workloads you plan to run.
       </p>
 
       <p>
-        Actor persistence also decides where an agent&apos;s secrets accumulate.
-        The{' '}
+        Persistence expands that trusted system to storage. The{' '}
         <a href="https://agentos-sdk.dev/docs/persistence/">
           persistence documentation
         </a>{' '}
-        says each VM&apos;s SQLite database is trusted plaintext storage. It may
+        says each actor VM&apos;s SQLite database is trusted plaintext. It may
         contain environment values, MCP credentials, prompts, messages, and
-        permission payloads without encryption or redaction. Anyone who can read
-        that database or its backups can read the agent&apos;s secrets and
-        history.
+        permission payloads without encryption or redaction, so access to that
+        database and its backups is access to the agent&apos;s secrets and
+        history. Using both products does not merge these trust boundaries; the
+        application must evaluate each one and the bridge between them.
       </p>
 
-      <h2 id="decision">Choose the layer you actually need</h2>
+      <h2 id="decision">Choose by what must survive the request</h2>
 
       <div className="article-decisions">
         <section>
           <h3>Choose ComputeSDK</h3>
           <p>
-            Your unit of work is a disposable provider-backed sandbox. Choose a
-            compatible provider when the workload needs native builds, preview
-            URLs, browsers, GPUs, or full Linux. If an agent submits the job,
-            you still own its loop and durable state; ComputeSDK will not
-            provide them.
+            Choose it when the unit of work is a provider-backed sandbox and the
+            application already owns the surrounding agent state. It fits work
+            that needs native builds, preview URLs, browsers, GPUs, or another
+            full Linux capability supplied by the selected provider.
           </p>
         </section>
         <section>
           <h3>Choose agentOS actor mode</h3>
           <p>
-            Your unit of work is an agent with durable identity and state: named
-            sessions, streamed transcripts, controlled credentials, approvals,
-            or scheduled work. Choose it when those sessions matter and the
-            workload fits inside its V8 and WebAssembly environment.
+            Choose it when the unit of work is a named agent whose sessions,
+            completed history, permissions, and selected files must outlive one
+            request. Its lightweight V8 and WebAssembly environment must also be
+            sufficient for the work.
           </p>
         </section>
         <section>
           <h3>Use both</h3>
           <p>
-            The same product needs a durable agent and full Linux capabilities.
-            agentOS actor mode retains the agent&apos;s identity, selected
-            state, sessions, history, and permission bookkeeping. Its
-            first-party bridge attaches a ComputeSDK sandbox that the
-            application or agent can invoke for full-Linux work.
+            Use both when the agent must persist but the machine does not.
+            agentOS retains the agent&apos;s identity and sessions; its
+            first-party bridge creates a ComputeSDK sandbox for full Linux work
+            and removes it with the actor VM.
           </p>
         </section>
       </div>
 
-      <h2 id="sources">Sources and reproducibility</h2>
-
       <p>
-        This comparison uses the{' '}
-        <a href="https://docs.computesdk.com/getting-started/quick-start">
-          ComputeSDK quickstart
-        </a>
-        {' and '}
-        its <a href={computeSdkRepository}>repository snapshot</a>. For agentOS,
-        it uses the{' '}
-        <a href="https://agentos-sdk.dev/docs/quickstart/">quickstart</a>, the{' '}
-        <a href="https://agentos-sdk.dev/docs/architecture/">
-          architecture guide
-        </a>
-        , the{' '}
-        <a href="https://agentos-sdk.dev/docs/security-model/">
-          security model
-        </a>
-        , the{' '}
-        <a href="https://agentos-sdk.dev/docs/limitations/">limitations</a>, and
-        the <a href={agentOsRepository}>agentOS repository snapshot</a>. Both
-        repositories were cloned with <code>--depth 1</code> on July 23, 2026.
-        The latest published ComputeSDK package was 4.1.4; the latest agentOS
-        release was{' '}
-        <a href="https://github.com/rivet-dev/agentos/releases/tag/v0.2.11">
-          v0.2.11
-        </a>{' '}
-        and its documentation described the APIs as preview. I did not use
-        package credentials or paid sandbox accounts, so this is an architecture
-        comparison rather than a latency benchmark.
+        ComputeSDK supplies somewhere for work to run. agentOS supplies someone
+        who can keep working. Their integration matters because a durable
+        someone should not require a permanent somewhere.
       </p>
     </>
   )
