@@ -148,6 +148,7 @@ export function OceanBanner() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
+    delete canvas.dataset.renderState
 
     const gl = canvas.getContext('webgl', {
       alpha: false,
@@ -294,6 +295,7 @@ export function OceanBanner() {
         background[2],
       )
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+      canvas.dataset.renderState = 'ready'
 
       if (
         currentSource === video &&
@@ -395,6 +397,7 @@ export function OceanBanner() {
       reducedMotion.removeEventListener('change', handleMotionChange)
       resizeObserver.disconnect()
       intersectionObserver.disconnect()
+      delete canvas.dataset.renderState
       gl.deleteTexture(texture)
       gl.deleteBuffer(positionBuffer)
       gl.deleteBuffer(textureCoordinateBuffer)
