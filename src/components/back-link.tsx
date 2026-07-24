@@ -22,7 +22,7 @@ export function BackLink() {
           strokeWidth="1.75"
         />
       </svg>
-      <span>Back</span>
+      <span>Home</span>
     </Link>
   )
 }
