@@ -26,8 +26,12 @@ export function BlogArticleLayout({
   return (
     <main className="blog-post">
       <nav className="editorial-nav" aria-label="Blog navigation">
-        <BackLink />
-        <span className="editorial-nav-brand">thoriq</span>
+        <div className="editorial-nav-back">
+          <BackLink />
+        </div>
+        <div className="editorial-nav-end">
+          <span className="editorial-nav-brand">thoriq</span>
+        </div>
       </nav>
 
       <article>
