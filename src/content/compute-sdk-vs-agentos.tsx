@@ -36,6 +36,16 @@ export function ComputeSdkVsAgentOsArticleBody({
       </p>
 
       <p>
+        That VM is deliberately narrower than a general-purpose Linux machine.
+        Its{' '}
+        <a href="https://agentos-sdk.dev/docs/limitations/">
+          documented limitations
+        </a>{' '}
+        include arbitrary binaries and package managers such as <code>apt</code>
+        {', '}Docker and eBPF, file watching, and direct GPU or hardware access.
+      </p>
+
+      <p>
         When a workload needs a browser, native compilation, or another full
         Linux capability, agentOS can{' '}
         <a href="https://agentos-sdk.dev/docs/sandbox/">
@@ -44,6 +54,19 @@ export function ComputeSdkVsAgentOsArticleBody({
         on demand. ComputeSDK is one of the supported providers for that
         sandbox. In that setup, agentOS owns the agent environment and
         ComputeSDK supplies the heavier machine underneath it.
+      </p>
+
+      <p>
+        ComputeSDK brings the inverse trade-off. The application must{' '}
+        <a href="https://docs.computesdk.com/getting-started/installation">
+          install a provider adapter and supply its credentials
+        </a>
+        {', '}handle API and network failures, and{' '}
+        <a href="https://docs.computesdk.com/getting-started/quick-start">
+          destroy the sandbox
+        </a>{' '}
+        before it becomes an idle cost. Its files only last for the sandbox
+        lifetime unless the application copies them somewhere durable.
       </p>
 
       <p>
