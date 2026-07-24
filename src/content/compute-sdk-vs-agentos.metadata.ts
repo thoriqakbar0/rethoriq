@@ -8,6 +8,6 @@ export const computeSdkVsAgentOsArticle = {
   deck: 'The agent should endure. The machine should disappear.',
   status: 'Article draft',
   publishedAt: '2026-07-23',
-  displayDate: 'July 23, 2026',
+  displayDate: 'July 2026',
   author: 'Thoriq Akbar',
 } as const
