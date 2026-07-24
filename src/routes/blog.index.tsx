@@ -18,7 +18,7 @@ export const Route = createFileRoute('/blog/')({
 
 const posts = [
   {
-    slug: 'compute-sdk-vs-agentos',
+    slug: 'enduring-agents-disappearing-machines',
     title: computeSdkVsAgentOsArticle.title,
     description: computeSdkVsAgentOsArticle.description,
     publishedAt: computeSdkVsAgentOsArticle.publishedAt,
@@ -45,7 +45,7 @@ function BlogIndexPage() {
             <li key={post.slug}>
               <Link
                 onClick={() => markFallbackRouteTransition('forward')}
-                to="/blog/compute-sdk-vs-agentos"
+                to="/blog/enduring-agents-disappearing-machines"
                 viewTransition
               >
                 <span className="post-list-heading">

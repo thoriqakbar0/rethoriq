@@ -64,7 +64,7 @@ function HomePage() {
         <Link
           className="writing-row"
           onClick={() => markFallbackRouteTransition('forward')}
-          to="/blog/compute-sdk-vs-agentos"
+          to="/blog/enduring-agents-disappearing-machines"
           viewTransition
         >
           <time dateTime={computeSdkVsAgentOsArticle.publishedAt}>

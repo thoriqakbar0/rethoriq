@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
+import { Route as BlogEnduringAgentsDisappearingMachinesRouteImport } from './routes/blog.enduring-agents-disappearing-machines'
 import { Route as BlogComputeSdkVsAgentosRouteImport } from './routes/blog.compute-sdk-vs-agentos'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,12 @@ const BlogIndexRoute = BlogIndexRouteImport.update({
   path: '/blog/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogEnduringAgentsDisappearingMachinesRoute =
+  BlogEnduringAgentsDisappearingMachinesRouteImport.update({
+    id: '/blog/enduring-agents-disappearing-machines',
+    path: '/blog/enduring-agents-disappearing-machines',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const BlogComputeSdkVsAgentosRoute = BlogComputeSdkVsAgentosRouteImport.update({
   id: '/blog/compute-sdk-vs-agentos',
   path: '/blog/compute-sdk-vs-agentos',
@@ -32,30 +39,47 @@ const BlogComputeSdkVsAgentosRoute = BlogComputeSdkVsAgentosRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/blog/compute-sdk-vs-agentos': typeof BlogComputeSdkVsAgentosRoute
+  '/blog/enduring-agents-disappearing-machines': typeof BlogEnduringAgentsDisappearingMachinesRoute
   '/blog/': typeof BlogIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blog/compute-sdk-vs-agentos': typeof BlogComputeSdkVsAgentosRoute
+  '/blog/enduring-agents-disappearing-machines': typeof BlogEnduringAgentsDisappearingMachinesRoute
   '/blog': typeof BlogIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/blog/compute-sdk-vs-agentos': typeof BlogComputeSdkVsAgentosRoute
+  '/blog/enduring-agents-disappearing-machines': typeof BlogEnduringAgentsDisappearingMachinesRoute
   '/blog/': typeof BlogIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/blog/compute-sdk-vs-agentos' | '/blog/'
+  fullPaths:
+    | '/'
+    | '/blog/compute-sdk-vs-agentos'
+    | '/blog/enduring-agents-disappearing-machines'
+    | '/blog/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/blog/compute-sdk-vs-agentos' | '/blog'
-  id: '__root__' | '/' | '/blog/compute-sdk-vs-agentos' | '/blog/'
+  to:
+    | '/'
+    | '/blog/compute-sdk-vs-agentos'
+    | '/blog/enduring-agents-disappearing-machines'
+    | '/blog'
+  id:
+    | '__root__'
+    | '/'
+    | '/blog/compute-sdk-vs-agentos'
+    | '/blog/enduring-agents-disappearing-machines'
+    | '/blog/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BlogComputeSdkVsAgentosRoute: typeof BlogComputeSdkVsAgentosRoute
+  BlogEnduringAgentsDisappearingMachinesRoute: typeof BlogEnduringAgentsDisappearingMachinesRoute
   BlogIndexRoute: typeof BlogIndexRoute
 }
 
@@ -75,6 +99,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/enduring-agents-disappearing-machines': {
+      id: '/blog/enduring-agents-disappearing-machines'
+      path: '/blog/enduring-agents-disappearing-machines'
+      fullPath: '/blog/enduring-agents-disappearing-machines'
+      preLoaderRoute: typeof BlogEnduringAgentsDisappearingMachinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/blog/compute-sdk-vs-agentos': {
       id: '/blog/compute-sdk-vs-agentos'
       path: '/blog/compute-sdk-vs-agentos'
@@ -88,6 +119,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BlogComputeSdkVsAgentosRoute: BlogComputeSdkVsAgentosRoute,
+  BlogEnduringAgentsDisappearingMachinesRoute:
+    BlogEnduringAgentsDisappearingMachinesRoute,
   BlogIndexRoute: BlogIndexRoute,
 }
 export const routeTree = rootRouteImport
