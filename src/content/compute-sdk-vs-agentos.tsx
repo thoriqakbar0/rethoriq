@@ -167,37 +167,32 @@ export function ComputeSdkVsAgentOsArticleBody({
         and backup access is secret access.
       </p>
 
-      <h2 id="decision">Choose what survives</h2>
+      <h2 id="decision">Choose the shape</h2>
 
       <div className="article-decisions">
         <section>
-          <h3>Disposable machine only</h3>
+          <h3>Machine for one job</h3>
           <p>
-            Use ComputeSDK when the app owns the durable state and needs a
-            machine for one job.
+            ComputeSDK fits a bounded job when the app already owns the state.
           </p>
         </section>
         <section>
-          <h3>Durable session only</h3>
+          <h3>Session across requests</h3>
           <p>
-            Use agentOS when the agent must outlive the request and its
-            lightweight runtime is enough.
+            agentOS fits when continuity matters and its lightweight runtime can
+            do the work.
           </p>
         </section>
         <section>
-          <h3>Durable session, disposable machine</h3>
+          <h3>Session with machines on demand</h3>
           <p>
-            Use both when the agent must persist but full Linux should exist
-            only for the task.
+            Use both when the agent needs continuity and the task needs full
+            Linux.
           </p>
         </section>
       </div>
 
-      <p>
-        ComputeSDK supplies somewhere for work to run. agentOS supplies someone
-        who keeps working. A durable someone should not need a permanent
-        somewhere.
-      </p>
+      <p>Keep the agent. Replace the machine.</p>
     </>
   )
 }
