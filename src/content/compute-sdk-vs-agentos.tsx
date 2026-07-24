@@ -38,9 +38,9 @@ export function ComputeSdkVsAgentOsArticleBody({
         <a href="https://docs.computesdk.com/getting-started/introduction">
           ComputeSDK
         </a>{' '}
-        look like competing tools because both run code. The split is
-        counterintuitive: agentOS sits on the session side, while ComputeSDK
-        sits on the machine side. They meet at commands and files.
+        reveal a useful contradiction. The agent should endure. The machine
+        should disappear. agentOS sits on the session side; ComputeSDK sits on
+        the machine side. They meet at commands and files.
       </p>
 
       {runtimeBoundaryExplorer}
