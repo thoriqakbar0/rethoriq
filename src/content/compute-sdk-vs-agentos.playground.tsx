@@ -12,24 +12,23 @@ interface RuntimeOption {
 const runtimeOptions: ReadonlyArray<RuntimeOption> = [
   {
     id: 'agent',
-    label: 'The session must survive',
+    label: 'Keep the session',
     recommendation: 'agentOS',
     detail:
-      'Keep identity, selected state, history, and permission bookkeeping on the session clock. The lightweight agent environment is enough.',
+      'Keep identity, history, and permissions. The lightweight runtime is enough.',
   },
   {
     id: 'machine',
-    label: 'Only the machine matters',
+    label: 'Run one job',
     recommendation: 'ComputeSDK',
-    detail:
-      'The work is bounded and needs full Linux. Create the machine for the job, then release it when the work ends.',
+    detail: 'Create a full Linux machine for the work, then release it.',
   },
   {
     id: 'both',
-    label: 'The session survives; machines come and go',
+    label: 'Keep the session; replace machines',
     recommendation: 'Use both',
     detail:
-      'Keep continuity in agentOS, then attach a ComputeSDK sandbox only when the session needs full Linux capability.',
+      'Keep continuity in agentOS. Attach a ComputeSDK sandbox when full Linux is needed.',
   },
 ]
 
@@ -101,7 +100,7 @@ export function RuntimeBoundaryExplorer() {
             <span>{selected.detail}</span>
           </>
         ) : (
-          <span>Select the lifecycle your product needs to preserve.</span>
+          <span>Choose what needs to last.</span>
         )}
       </output>
     </section>

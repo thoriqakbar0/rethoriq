@@ -12,28 +12,25 @@ export function ComputeSdkVsAgentOsArticleBody({
 }: ComputeSdkVsAgentOsArticleBodyProps) {
   return (
     <>
+      <p>A coding agent is not the machine doing its work.</p>
+
       <p>
-        A coding agent is not the machine doing its work. The agent may need to
-        keep its identity, sessions, permissions, and history for months; the
-        machine may need to exist for one browser task, build, or test run. The
-        design problem is how to connect them without forcing them to share a
-        lifetime.
+        The agent may need to remember for months. The machine may exist for one
+        build. Good architecture lets them separate without losing the handoff
+        between them.
       </p>
 
-      <h2 id="boundary">The session and machine run on different clocks</h2>
+      <h2 id="boundary">Two clocks</h2>
 
       <p>
-        The session owns continuity. It gives the agent an address, remembers
-        completed turns, carries permissions, and decides what should survive
-        sleep or a disconnected client. Its clock advances across requests, even
-        when no code is running.
+        The session owns continuity. It holds the agent&apos;s address,
+        completed turns, permissions, and durable state. Its clock keeps running
+        even when no code does.
       </p>
 
       <p>
-        The machine owns capability. It provides the browser, compiler, GPU,
-        database, or full Linux environment needed for a particular job. Its
-        clock starts when the workload needs those resources and should stop
-        when the work ends, before idle infrastructure becomes permanent cost.
+        The machine owns capability. It supplies the browser, compiler, GPU, or
+        full Linux environment. Its clock stops when the job ends.
       </p>
 
       <p>
@@ -41,42 +38,37 @@ export function ComputeSdkVsAgentOsArticleBody({
         <a href="https://docs.computesdk.com/getting-started/introduction">
           ComputeSDK
         </a>{' '}
-        make that split concrete. agentOS keeps the session addressable and
-        supplies a lightweight agent environment. ComputeSDK creates and
-        controls provider-backed machines. They overlap at commands and files,
-        but the bridge between their lifecycles is the more useful design.
+        make the split concrete. agentOS sits on the session side. ComputeSDK
+        sits on the machine side. They meet at commands and files.
       </p>
 
       {runtimeBoundaryExplorer}
 
-      <h2 id="quickstarts">Execution is a handoff between lifecycles</h2>
+      <h2 id="quickstarts">The handoff</h2>
 
       <p>
-        The session decides that a turn needs capabilities outside its local
-        environment. It requests a machine, gives that machine the work, records
-        the useful result, and releases the infrastructure. The machine can
-        disappear without erasing who requested the work, what permissions were
-        granted, or where the conversation should continue.
+        A turn needs more than the session can provide. The session requests a
+        machine, sends the work, keeps the result, then releases the machine.
       </p>
 
       <p>
-        The two quickstarts expose this seam from opposite directions.{' '}
+        The machine disappears. The session still knows who asked, what was
+        allowed, and where to continue.
+      </p>
+
+      <p>
+        The quickstarts show both sides.{' '}
         <a href="https://docs.computesdk.com/getting-started/quick-start">
-          ComputeSDK begins
+          ComputeSDK creates
         </a>{' '}
-        by creating a sandbox and ends by destroying it.{' '}
-        <a href="https://agentos-sdk.dev/docs/quickstart/">agentOS begins</a> by
-        naming an actor and opening a session. Both execute code; only the
-        session is expected to outlive that execution.
+        and destroys a sandbox.{' '}
+        <a href="https://agentos-sdk.dev/docs/quickstart/">agentOS names</a> an
+        actor and opens a session.
       </p>
 
-      <h2 id="trade-offs">The bridge needs an ownership contract</h2>
+      <h2 id="trade-offs">Own the seam</h2>
 
-      <p>
-        Connecting the lifecycles is easy to describe and easy to blur. The
-        bridge stays legible only when every kind of state and authority has one
-        owner.
-      </p>
+      <p>Every kind of state and authority needs one owner.</p>
 
       <div className="article-table-wrap">
         <p className="article-table-hint" aria-hidden="true">
@@ -93,60 +85,50 @@ export function ComputeSdkVsAgentOsArticleBody({
           <tbody>
             <tr>
               <th scope="row">Identity</th>
-              <td>Agent address, sessions, permissions, completed history</td>
-              <td>A sandbox ID for one execution environment</td>
+              <td>Agent address, history, and permissions</td>
+              <td>Sandbox ID</td>
             </tr>
             <tr>
               <th scope="row">Lifetime</th>
-              <td>Across requests, clients, and sleep/wake cycles</td>
-              <td>Until the workload finishes or the sandbox is destroyed</td>
+              <td>Across requests and sleep</td>
+              <td>One workload</td>
             </tr>
             <tr>
               <th scope="row">Durable state</th>
-              <td>Selected files, session configuration, completed history</td>
-              <td>Provider-specific files, templates, or snapshots</td>
+              <td>Selected files and completed turns</td>
+              <td>Files or snapshots</td>
             </tr>
             <tr>
-              <th scope="row">Live state</th>
-              <td>No promise that commands or agent processes survive sleep</td>
-              <td>Processes, ports, browsers, compilers, and native tools</td>
+              <th scope="row">Live capability</th>
+              <td>Lightweight agent runtime</td>
+              <td>Browsers, ports, compilers, and GPUs</td>
             </tr>
             <tr>
-              <th scope="row">Trust boundary</th>
-              <td>Agent runtime, persistent storage, and approved bindings</td>
-              <td>
-                Provider isolation, images, credentials, and network policy
-              </td>
-            </tr>
-            <tr>
-              <th scope="row">Portability</th>
-              <td>
-                The agent runtime across managed or self-hosted deployment
-              </td>
-              <td>Shared sandbox operations across compute providers</td>
+              <th scope="row">Trust</th>
+              <td>Runtime, storage, and bindings</td>
+              <td>Isolation, images, and network</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <h3>Durable does not mean frozen in place</h3>
+      <h3>Sleep is not pause</h3>
 
       <p>
-        Across sleep, agentOS preserves selected files, session configuration,
-        completed history, and permission bookkeeping. It does not preserve live
-        commands or agent processes. Waking an actor reconstructs a safe
-        continuation over durable state; it does not resume an entire suspended
-        computer.
+        agentOS keeps selected files, session configuration, completed history,
+        and permissions. It does not keep live commands or agent processes.
       </p>
 
-      <h3>The agent can borrow a full machine</h3>
+      <p>
+        Wake rebuilds the session from durable state. It does not resume a
+        frozen computer.
+      </p>
+
+      <h3>Borrow the machine</h3>
 
       <p>
-        Using both means working with two different computers. The agentOS VM is
-        the lightweight V8 and WebAssembly environment inside the application
-        host. The ComputeSDK sandbox is the external full Linux machine. The
-        second extends the first with capabilities it deliberately does not
-        contain.
+        agentOS runs a lightweight V8 and WebAssembly environment. ComputeSDK
+        supplies the external full Linux machine.
       </p>
 
       <p>
@@ -154,72 +136,66 @@ export function ComputeSdkVsAgentOsArticleBody({
         <a href="https://agentos-sdk.dev/docs/sandbox/">
           sandbox-mounting extension
         </a>{' '}
-        starts a ComputeSDK-backed sandbox, projects its filesystem into the
-        actor VM, exposes its process controls to the agent, and destroys the
-        sandbox with the VM. The agent keeps its identity and sessions while
-        borrowing disposable hands for browsers, native compilation, GPUs, or
-        other full Linux work.
+        mounts the sandbox filesystem, exposes its process controls, and
+        destroys the sandbox with the VM.
       </p>
 
-      <h2 id="security">The bridge connects capability, not trust</h2>
+      <p>
+        The agent keeps its continuity. The machine becomes disposable hands.
+      </p>
+
+      <h2 id="security">Trust stays split</h2>
 
       <p>
-        The session and machine remain separate security systems. On the session
-        side, agentOS&apos;s{' '}
+        The session trusts agentOS&apos;s{' '}
         <a href="https://agentos-sdk.dev/docs/security-model/">threat model</a>{' '}
-        places the virtual kernel, sidecar, and approved host bindings inside
-        the trusted system. On the machine side, the selected ComputeSDK
-        provider remains responsible for tenant isolation, images, credentials,
-        and network policy. The bridge gives one side access to the other; it
-        does not collapse either trust boundary.
+        and approved host bindings. The machine trusts the selected
+        provider&apos;s isolation, images, credentials, and network policy.
       </p>
 
       <p>
-        Session persistence deserves particular care because continuity
-        accumulates secrets. The{' '}
+        The bridge connects them. It does not make either boundary disappear.
+      </p>
+
+      <p>
+        Continuity also accumulates secrets. The{' '}
         <a href="https://agentos-sdk.dev/docs/persistence/">
           persistence documentation
         </a>{' '}
-        says each actor VM&apos;s SQLite database is trusted plaintext. It may
-        contain environment values, MCP credentials, prompts, messages, and
-        permission payloads without encryption or redaction, so access to that
-        database and its backups is access to the agent&apos;s secrets and
-        history.
+        says each actor VM&apos;s SQLite database is trusted plaintext. Database
+        and backup access is secret access.
       </p>
 
-      <h2 id="decision">Choose by what must survive the request</h2>
+      <h2 id="decision">Choose what survives</h2>
 
       <div className="article-decisions">
         <section>
           <h3>Disposable machine only</h3>
           <p>
-            Use ComputeSDK alone when the application already owns any durable
-            state and only needs a provider-backed environment for a bounded
-            job.
+            Use ComputeSDK when the app owns the durable state and needs a
+            machine for one job.
           </p>
         </section>
         <section>
           <h3>Durable session only</h3>
           <p>
-            Use agentOS alone when the named agent must outlive a request and
-            its lightweight V8 and WebAssembly environment already supplies
-            every capability the work needs.
+            Use agentOS when the agent must outlive the request and its
+            lightweight runtime is enough.
           </p>
         </section>
         <section>
           <h3>Durable session, disposable machine</h3>
           <p>
-            Bridge both when the agent must persist but full Linux should exist
-            only for the task. agentOS keeps continuity; ComputeSDK supplies and
-            releases the machine.
+            Use both when the agent must persist but full Linux should exist
+            only for the task.
           </p>
         </section>
       </div>
 
       <p>
         ComputeSDK supplies somewhere for work to run. agentOS supplies someone
-        who can keep working. Their integration matters because a durable
-        someone should not require a permanent somewhere.
+        who keeps working. A durable someone should not need a permanent
+        somewhere.
       </p>
     </>
   )
