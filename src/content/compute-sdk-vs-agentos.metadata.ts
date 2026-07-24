@@ -4,8 +4,8 @@
 export const computeSdkVsAgentOsArticle = {
   title: 'Durable agent, disposable machine',
   description:
-    'A durable agent session can borrow a disposable machine. agentOS and ComputeSDK show how to keep those lifecycles separate.',
-  deck: 'The session remembers. The machine does the work.',
+    'ComputeSDK and agentOS look like competing runtimes until their different lifecycles reveal how they fit together.',
+  deck: 'The agent should endure. The machine should disappear.',
   status: 'Article draft',
   publishedAt: '2026-07-23',
   displayDate: 'July 23, 2026',

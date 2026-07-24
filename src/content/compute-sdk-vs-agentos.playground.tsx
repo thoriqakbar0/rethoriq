@@ -12,23 +12,23 @@ interface RuntimeOption {
 const runtimeOptions: ReadonlyArray<RuntimeOption> = [
   {
     id: 'agent',
-    label: 'Keep the session',
+    label: 'Agent across requests',
     recommendation: 'agentOS',
     detail:
-      'Keep identity, history, and permissions. The lightweight runtime is enough.',
+      'Keep identity, history, and permissions when the lightweight runtime can do the work.',
   },
   {
     id: 'machine',
-    label: 'Run one job',
+    label: 'Machine for one job',
     recommendation: 'ComputeSDK',
-    detail: 'Create a full Linux machine for the work, then release it.',
+    detail: 'Create an isolated Linux machine for the work, then release it.',
   },
   {
     id: 'both',
-    label: 'Keep the session; replace machines',
+    label: 'Agent with machines on demand',
     recommendation: 'Use both',
     detail:
-      'Keep continuity in agentOS. Attach a ComputeSDK sandbox when full Linux is needed.',
+      'Keep continuity in agentOS and attach a ComputeSDK sandbox when a turn needs full Linux.',
   },
 ]
 
@@ -47,7 +47,7 @@ export function RuntimeBoundaryExplorer() {
     >
       <header className="runtime-explorer-header">
         <p>Boundary</p>
-        <h2 id="runtime-explorer-title">What must survive?</h2>
+        <h2 id="runtime-explorer-title">Which lifetime do you need?</h2>
       </header>
 
       <fieldset className="runtime-explorer-options">
@@ -74,7 +74,7 @@ export function RuntimeBoundaryExplorer() {
         >
           {need !== 'machine' ? (
             <div>
-              <span>Durable session</span>
+              <span>Durable agent</span>
               <strong>agentOS</strong>
             </div>
           ) : null}
@@ -100,7 +100,7 @@ export function RuntimeBoundaryExplorer() {
             <span>{selected.detail}</span>
           </>
         ) : (
-          <span>Choose what needs to last.</span>
+          <span>Choose what must remain after the work ends.</span>
         )}
       </output>
     </section>
