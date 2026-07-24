@@ -4,7 +4,7 @@
 export const computeSdkVsAgentOsArticle = {
   title: 'Durable agent, disposable machine',
   description:
-    'ComputeSDK and agentOS look like competing runtimes until their different lifecycles reveal how they fit together.',
+    'agentOS can own the agent runtime and mount ComputeSDK on demand when the work needs a full sandbox.',
   deck: 'The agent should endure. The machine should disappear.',
   status: 'Article draft',
   publishedAt: '2026-07-23',

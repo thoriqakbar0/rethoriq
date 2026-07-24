@@ -18,36 +18,43 @@ export function ComputeSdkVsAgentOsArticleBody({
       </p>
 
       <p>
-        Identity, history, and permissions may need to survive for months. A
-        browser, compiler, or Linux environment may only be needed for a few
-        minutes. Treat them as one lifecycle and either the compute stays alive
-        too long or the agent loses continuity too early.
+        Today, we&apos;re going to look at two projects that tackle this problem
+        from different sides: agentOS keeps the agent available across requests,
+        while ComputeSDK supplies a full machine when the work needs one.
       </p>
 
-      <h2 id="boundary">Why they look like competitors</h2>
+      <h2 id="boundary">They overlap on purpose</h2>
 
       <p>
         <a href="https://agentos-sdk.dev/docs/architecture/">agentOS</a> and{' '}
         <a href="https://docs.computesdk.com/getting-started/introduction">
           ComputeSDK
         </a>{' '}
-        both run code, so they initially look like two tools for the same job.
-        Their quickstarts reveal the difference.
+        both run code, but that does not make them clean alternatives. agentOS
+        already provides a lightweight virtual machine for coding, scripts, API
+        calls, and orchestration.
       </p>
 
       <p>
+        When a workload needs a browser, native compilation, or another full
+        Linux capability, agentOS can{' '}
+        <a href="https://agentos-sdk.dev/docs/sandbox/">
+          mount an external sandbox
+        </a>{' '}
+        on demand. ComputeSDK is one of the supported providers for that
+        sandbox. In that setup, agentOS owns the agent environment and
+        ComputeSDK supplies the heavier machine underneath it.
+      </p>
+
+      <p>
+        Their quickstarts still reveal the different centers of gravity.{' '}
         <a href="https://docs.computesdk.com/getting-started/quick-start">
           ComputeSDK creates
         </a>{' '}
-        a sandbox, runs a command, then destroys the sandbox.{' '}
+        and destroys a sandbox.{' '}
         <a href="https://agentos-sdk.dev/docs/quickstart/">agentOS names</a> an
-        actor, opens a session, then runs a prompt. One starts with a machine.
-        The other starts with someone who must remain addressable.
-      </p>
-
-      <p>
-        Their overlap is execution. Their difference is what must exist before
-        the command starts and what must remain after it ends.
+        actor and opens a session. One begins with the machine; the other begins
+        with the agent that may decide to use it.
       </p>
 
       {runtimeBoundaryExplorer}
