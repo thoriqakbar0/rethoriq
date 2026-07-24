@@ -218,38 +218,16 @@ export function ComputeSdkVsAgentOsArticleBody({
         agent&apos;s secrets and history.
       </p>
 
-      <h2 id="decision">Choose by lifetime</h2>
-
-      <div className="article-decisions">
-        <section>
-          <h3>A bounded job</h3>
-          <p>
-            Use ComputeSDK when the application already owns the durable state
-            and only needs an isolated machine for the work.
-          </p>
-        </section>
-        <section>
-          <h3>An agent across requests</h3>
-          <p>
-            Use agentOS when the agent needs identity and history across
-            requests, and its lightweight runtime is enough.
-          </p>
-        </section>
-        <section>
-          <h3>An agent with machines on demand</h3>
-          <p>
-            Use both when the agent must continue across turns but particular
-            turns need a browser, native tools, a GPU, or full Linux.
-          </p>
-        </section>
-      </div>
+      <h2 id="decision">Start with what must last</h2>
 
       <p>
-        The durable part is the agent&apos;s identity and history. The
-        disposable part is the compute. Once those lifetimes are separated,
-        ComputeSDK and agentOS stop looking like competitors and start fitting
-        together.
+        If the work is one bounded job, ComputeSDK can be the whole
+        architecture. If the agent must survive the request, agentOS becomes its
+        durable home. When a turn crosses the limits of the lightweight VM,
+        mount a ComputeSDK sandbox for that work and tear it down afterward.
       </p>
+
+      <p>The agent can outlive every machine it uses.</p>
     </>
   )
 }
