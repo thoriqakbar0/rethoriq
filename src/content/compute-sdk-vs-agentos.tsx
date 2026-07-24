@@ -13,36 +13,38 @@ export function ComputeSdkVsAgentOsArticleBody({
   return (
     <>
       <p>
-        A coding agent creates a useful contradiction: the agent should endure,
-        while the machine doing its work should be easy to discard.
+        I came across agentOS and ComputeSDK while looking at the same question:
+        where should a coding agent run? They look like competitors because both
+        execute code inside isolated environments.
       </p>
 
       <p>
-        Today, we&apos;re going to look at two projects that tackle this problem
-        from different sides: agentOS keeps the agent available across requests,
-        while ComputeSDK supplies a full machine when the work needs one.
+        The counterintuitive part is that agentOS can use ComputeSDK as its
+        external sandbox. The relationship makes sense once you separate the
+        agent&apos;s durable state from the machines that run its code.
       </p>
 
-      <h2 id="boundary">They overlap on purpose</h2>
+      <h2 id="boundary">They look like competitors</h2>
 
       <p>
         <a href="https://agentos-sdk.dev/docs/architecture/">agentOS</a> and{' '}
         <a href="https://docs.computesdk.com/getting-started/introduction">
           ComputeSDK
         </a>{' '}
-        both run code, but that does not make them clean alternatives. agentOS
-        already provides a lightweight virtual machine for coding, scripts, API
-        calls, and orchestration.
+        both run code, but they operate at different layers. agentOS includes an
+        isolated Linux VM with its own filesystem, process table, network
+        policy, and V8 and WebAssembly executor.
       </p>
 
       <p>
-        That VM is deliberately narrower than a general-purpose Linux machine.
-        Its{' '}
+        That VM implements a focused Linux surface rather than a full
+        distribution. Its{' '}
         <a href="https://agentos-sdk.dev/docs/limitations/">
           documented limitations
         </a>{' '}
-        include arbitrary binaries and package managers such as <code>apt</code>
-        {', '}Docker and eBPF, file watching, and direct GPU or hardware access.
+        include installing arbitrary binaries or using package managers such as{' '}
+        <code>apt</code>, Docker and eBPF, file watching, and direct GPU or
+        hardware access.
       </p>
 
       <p>
@@ -51,13 +53,15 @@ export function ComputeSdkVsAgentOsArticleBody({
         <a href="https://agentos-sdk.dev/docs/sandbox/">
           mount an external sandbox
         </a>{' '}
-        on demand. ComputeSDK is one of the supported providers for that
-        sandbox. In that setup, agentOS owns the agent environment and
-        ComputeSDK supplies the heavier machine underneath it.
+        on demand. ComputeSDK is one of the supported adapters for that sandbox.
+        In that setup, agentOS manages the actor and session while ComputeSDK
+        gives it one API for asking the selected provider to provision the
+        heavier environment.
       </p>
 
       <p>
-        ComputeSDK brings the inverse trade-off. The application must{' '}
+        ComputeSDK standardizes the sandbox interface; it does not own the
+        application lifecycle. The application must{' '}
         <a href="https://docs.computesdk.com/getting-started/installation">
           install a provider adapter and supply its credentials
         </a>
@@ -70,19 +74,21 @@ export function ComputeSdkVsAgentOsArticleBody({
       </p>
 
       <p>
-        Their quickstarts still reveal the different centers of gravity.{' '}
+        The quickstarts make the boundary concrete.{' '}
         <a href="https://docs.computesdk.com/getting-started/quick-start">
-          ComputeSDK creates
+          ComputeSDK calls <code>compute.sandbox.create()</code>
         </a>{' '}
-        and destroys a sandbox.{' '}
-        <a href="https://agentos-sdk.dev/docs/quickstart/">agentOS names</a> an
-        actor and opens a session. One begins with the machine; the other begins
-        with the agent that may decide to use it.
+        and later <code>sandbox.destroy()</code>.{' '}
+        <a href="https://agentos-sdk.dev/docs/quickstart/">
+          agentOS calls <code>getOrCreate(&quot;my-agent&quot;)</code>
+        </a>{' '}
+        and opens a durable session. The first API centers a sandbox resource;
+        the second centers an actor that can use one.
       </p>
 
       {runtimeBoundaryExplorer}
 
-      <h2 id="quickstarts">One turn, two lifecycles</h2>
+      <h2 id="quickstarts">A turn can need both</h2>
 
       <p>
         Imagine an agent that needs to inspect a website, change some code, and
@@ -91,29 +97,26 @@ export function ComputeSdkVsAgentOsArticleBody({
       </p>
 
       <p>
-        agentOS wakes the named actor and restores the state needed to continue.
-        When its lightweight V8 and WebAssembly environment cannot do the work,
-        the session attaches a ComputeSDK sandbox with full Linux capabilities.
+        agentOS wakes the named actor and reconstructs the session from
+        persisted state. When the turn needs capabilities outside its focused
+        VM, the configured sandbox extension starts an external environment
+        through ComputeSDK and the selected provider.
       </p>
 
       <p>
-        The sandbox runs the browser, commands, and build. Useful files and
-        results flow back into the session. The sandbox can then disappear
-        without erasing who requested the work, what was allowed, or where the
-        next turn should begin.
+        The external sandbox runs the browser, commands, and build, and its
+        filesystem is mounted inside the agentOS VM. Before teardown, the agent
+        must copy any results it wants to keep into durable agentOS storage. The
+        sandbox can then disappear while the actor&apos;s identity,
+        configuration, and completed history remain available.
       </p>
 
-      <p>
-        That is the bridge: capability crosses into the session, but the
-        machine&apos;s lifetime does not.
-      </p>
-
-      <h2 id="trade-offs">Keep ownership clear</h2>
+      <h2 id="trade-offs">Name both compute layers</h2>
 
       <p>
-        The integration stays understandable when each concern belongs to one
-        side. The session owns continuity. The machine owns temporary
-        capability.
+        agentOS owns persisted actor state and the session that can be
+        reconstructed from it. The external sandbox owns provider-hosted compute
+        for as long as the workload needs it.
       </p>
 
       <div className="article-table-wrap">
@@ -124,8 +127,8 @@ export function ComputeSdkVsAgentOsArticleBody({
           <thead>
             <tr>
               <th scope="col">Concern</th>
-              <th scope="col">Session side</th>
-              <th scope="col">Machine side</th>
+              <th scope="col">agentOS actor and VM</th>
+              <th scope="col">External sandbox</th>
             </tr>
           </thead>
           <tbody>
@@ -136,18 +139,25 @@ export function ComputeSdkVsAgentOsArticleBody({
             </tr>
             <tr>
               <th scope="row">Lifetime</th>
-              <td>Across requests, clients, and sleep</td>
-              <td>Until the workload finishes</td>
+              <td>The VM may sleep; persisted actor state survives</td>
+              <td>Until the application destroys it or its timeout expires</td>
             </tr>
             <tr>
               <th scope="row">State</th>
-              <td>Selected files and completed history</td>
-              <td>Live processes, ports, and working files</td>
+              <td>
+                Durable files, session configuration, and completed history
+              </td>
+              <td>Mounted files, live processes, ports, and working state</td>
             </tr>
             <tr>
               <th scope="row">Capability</th>
-              <td>Lightweight V8 and WebAssembly runtime</td>
-              <td>Full Linux, browsers, compilers, and GPUs</td>
+              <td>
+                Focused Linux surface with V8, WebAssembly, and registered tools
+              </td>
+              <td>
+                Full Linux; browsers, compilers, and GPUs when the provider
+                supports them
+              </td>
             </tr>
             <tr>
               <th scope="row">Trust</th>
@@ -158,7 +168,7 @@ export function ComputeSdkVsAgentOsArticleBody({
         </table>
       </div>
 
-      <h3>Sleep rebuilds the agent</h3>
+      <h3>Sleep does not freeze the agent</h3>
 
       <p>
         agentOS preserves selected files, session configuration, completed
@@ -167,14 +177,14 @@ export function ComputeSdkVsAgentOsArticleBody({
         continuation from durable state; it does not resume a frozen computer.
       </p>
 
-      <h3>The machine extends the agent</h3>
+      <h3>The external sandbox adds capabilities</h3>
 
       <p>
-        Both layers describe a computer, which is where the architecture can
-        become confusing. The agentOS VM is the lightweight environment inside
-        the application host. The ComputeSDK sandbox is the external full Linux
-        machine. The second gives the first capabilities it deliberately does
-        not contain.
+        Both layers run code, which is where the architecture can become
+        confusing. The agentOS VM is the focused environment inside the
+        application host. The selected provider runs the external full Linux
+        sandbox. ComputeSDK is the interface between them, not the machine
+        itself.
       </p>
 
       <p>
@@ -182,29 +192,30 @@ export function ComputeSdkVsAgentOsArticleBody({
         <a href="https://agentos-sdk.dev/docs/sandbox/">
           sandbox-mounting extension
         </a>{' '}
-        starts a ComputeSDK-backed sandbox, projects its filesystem into the
-        actor VM, exposes remote process controls, and destroys the sandbox with
-        the VM. The agent keeps its identity and sessions while the machine
-        remains replaceable.
+        starts an external sandbox through the configured provider, projects its
+        filesystem into the actor VM, exposes remote process controls, and
+        destroys the sandbox with the VM. Durable actor files, session metadata,
+        and completed history remain available when agentOS reconstructs the
+        session later.
       </p>
 
-      <h2 id="security">Two systems, two trust boundaries</h2>
+      <h2 id="security">The bridge needs its own policy</h2>
 
       <p>
-        The bridge connects the systems without merging their security models.
-        On the session side, agentOS&apos;s{' '}
+        agentOS describes its security model as beta and still undergoing
+        review. Within that model, its{' '}
         <a href="https://agentos-sdk.dev/docs/security-model/">threat model</a>{' '}
         places its virtual kernel, sidecar, and approved host bindings inside
-        the trusted system. On the machine side, the selected ComputeSDK
-        provider remains responsible for isolation, images, credentials, and
+        the trusted system. The selected sandbox provider remains responsible
+        for the external environment&apos;s isolation, images, credentials, and
         network policy.
       </p>
 
       <p>
-        The seam needs its own policy: which session may create a sandbox, which
-        credentials enter it, what network it can reach, and which files may
-        return. Connecting two boundaries creates a path between them; it does
-        not make either boundary disappear.
+        The integration needs an explicit policy for which actor may create a
+        sandbox, which credentials enter it, what network it can reach, and
+        which files may return. Each system can enforce its own boundary, but
+        the application owns what crosses between them.
       </p>
 
       <p>
@@ -218,13 +229,14 @@ export function ComputeSdkVsAgentOsArticleBody({
         agent&apos;s secrets and history.
       </p>
 
-      <h2 id="decision">Start with what must last</h2>
+      <h2 id="decision">Choose by what needs to survive</h2>
 
       <p>
-        If the work is one bounded job, ComputeSDK can be the whole
-        architecture. If the agent must survive the request, agentOS becomes its
-        durable home. When a turn crosses the limits of the lightweight VM,
-        mount a ComputeSDK sandbox for that work and tear it down afterward.
+        For one bounded job, ComputeSDK and a sandbox provider can be the whole
+        architecture. For identity, files, and completed history across
+        requests, use agentOS. When the same agent also needs a browser, native
+        toolchain, GPU, or another provider-specific capability, configure an
+        external sandbox and copy durable outputs back before disposing of it.
       </p>
 
       <p>The agent can outlive every machine it uses.</p>

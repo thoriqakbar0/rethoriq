@@ -23,7 +23,7 @@ const posts = [
     description: computeSdkVsAgentOsArticle.description,
     publishedAt: computeSdkVsAgentOsArticle.publishedAt,
     displayDate: computeSdkVsAgentOsArticle.displayDate,
-    status: 'Draft',
+    status: computeSdkVsAgentOsArticle.status,
   },
 ] as const
 
